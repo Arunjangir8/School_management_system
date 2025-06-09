@@ -15,7 +15,7 @@ export default function DashBoardLayout({
       <div className="w-[14%] md:w-[8%] lg:w-[14%] p-4 top-0 left-0 static overflow-y-scroll ">
         <Link href="/" className="flex justify-center items-center lg:justify-start gap-2 ">
           <Image src="/logo.png" alt="Logo" width={32} height={32} />
-          <span className="hidden lg:block">FunSchool</span>
+          <span className="hidden lg:block font-bold">FunSchool</span>
         </Link>
         <Menu/>
       </div>
