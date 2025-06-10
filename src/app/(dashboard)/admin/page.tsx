@@ -6,10 +6,10 @@ import EventCalender from "@/components/EventCalender"
 import Announcements from "@/components/Announcements"
 const AdminPage = () => {
   return (
-    <div>
+    
       <div className="p-4 flex gap-4 flex-col md:flex-row">
         {/* Left  */}
-        <div className="w-full md:w-2/3 flex flex-col gap-10">
+        <div className="w-full lg:w-2/3 flex flex-col gap-10">
           <div className="flex gap-4 justify-between flex-wrap">
             <UserCard type="Student" />
             <UserCard type="Teacher" />
@@ -23,13 +23,13 @@ const AdminPage = () => {
           <div className="w-full h-[550px]"><FinanceChart /></div>
         </div>
         {/* Right */}
-        <div className="w-full md:w-1/3 flex flex-col gap-8">
+        <div className="w-full lg:w-1/3 flex flex-col gap-8">
           <EventCalender />
           <Announcements/>
         </div>
 
       </div>
-    </div>
+    
   )
 }
 

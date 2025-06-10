@@ -10,7 +10,7 @@ export default function DashBoardLayout({
 }>) {
   return (
 
-    <div className="h-screen flex ">
+    <div className="h-screen flex">
       {/* LEFT */}
       <div className="w-[14%] md:w-[8%] lg:w-[14%] p-4 top-0 left-0 static overflow-y-scroll ">
         <Link href="/" className="flex justify-center items-center lg:justify-start gap-2 ">
@@ -20,7 +20,7 @@ export default function DashBoardLayout({
         <Menu/>
       </div>
       {/* RIGHT */}
-      <div className="w-[86%] md:w-[92%] lg:w-[86%] bg-[#f7f8fa] overflow-scroll">
+      <div className="w-[86%] md:w-[92%] lg:w-[86%] bg-[#f7f8fa] overflow-scroll flex flex-col">
         <Navbar/>
         {children}
       </div>
