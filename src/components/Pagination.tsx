@@ -25,7 +25,7 @@ const Pagination =({page,count}:{
           )
         })}
       </div>
-      <button disabled={!hasNext } onClick={()=>changePage(page+1)} className="py-1 px-4 rounded-md bg-slate-200 tex-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed">Prev</button>
+      <button disabled={!hasNext } onClick={()=>changePage(page+1)} className="py-1 px-4 rounded-md bg-slate-200 tex-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
     </div>
   )
 } 
