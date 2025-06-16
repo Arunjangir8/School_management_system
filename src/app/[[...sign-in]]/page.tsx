@@ -1,5 +1,4 @@
 'use client'
-
 import * as Clerk from '@clerk/elements/common'
 import * as SignIn from '@clerk/elements/sign-in'
 import { useUser } from '@clerk/nextjs'
@@ -8,7 +7,6 @@ import { useEffect } from 'react'
 
 export default function SignInPage() {
     const {isLoaded,isSignedIn , user} = useUser()
-    console.log(user)
     const router = useRouter()
     useEffect(()=>{
         const role = user?.publicMetadata.role;

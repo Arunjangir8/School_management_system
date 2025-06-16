@@ -5,6 +5,7 @@ import FinanceChart from "@/components/FinanceChart"
 import EventCalender from "@/components/EventCalender"
 import Announcements from "@/components/Announcements"
 const AdminPage = () => {
+  
   return (
     
       <div className="p-4 flex gap-4 flex-col md:flex-row">
