@@ -1,7 +1,14 @@
 import Announcements from "@/components/Announcements"
 import BigCalendar from "@/components/BigCalender"
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-const TeacherPage = () => {
+const TeacherPage =async() => {
+  const user =  await currentUser();
+     const role = (user?.publicMetadata as { role?: string })?.role;
+     if (role !== "teacher") {
+      redirect(`/${role}`);
+    }
   return (
     <div className="flex-1 p-4 flex gap-4 flex-col md:flex-row">
       <div className="w-full xl:w-2/3 flex flex-col gap-10">

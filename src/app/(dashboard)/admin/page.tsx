@@ -4,8 +4,14 @@ import AttendanceChart from "@/components/AttendanceChart"
 import FinanceChart from "@/components/FinanceChart"
 import EventCalender from "@/components/EventCalender"
 import Announcements from "@/components/Announcements"
-const AdminPage = () => {
-  
+import { currentUser } from "@clerk/nextjs/server"
+import { redirect } from "next/navigation"
+const AdminPage =async () => {
+   const user =  await currentUser();
+   const role = (user?.publicMetadata as { role?: string })?.role;
+   if (role !== "admin") {
+    redirect(`/${role}`);
+  }
   return (
     
       <div className="p-4 flex gap-4 flex-col md:flex-row">
