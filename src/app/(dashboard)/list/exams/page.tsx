@@ -5,6 +5,7 @@ import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import {currentUserId, role} from "@/lib/utlities";
 import { currentUser } from "@clerk/nextjs/server";
 import { Class, Exam, Prisma, Subject, Teacher } from "@prisma/client";
 import Image from "next/image";
@@ -19,14 +20,6 @@ type ExamList = Exam & {
   };
 };
 
-let role: string | undefined;
-const roleSet = async () => {
-    const user = await currentUser();
-    return (user?.publicMetadata as { role?: string })?.role;
-}
-roleSet().then((r) => {
-    role = r;
-});
 
 const columns = [
     {
@@ -101,6 +94,34 @@ const ExamListPage = async ({ searchParams, }: { searchParams: { [key: string]: 
         }
       }
     }
+  }
+  switch (role) {
+    case "admin":
+      break;
+    case "teacher":
+      query.lesson.teacherId = currentUserId!;
+      break;
+    case "student":
+      query.lesson.class = {
+        students: {
+          some: {
+            id: currentUserId!,
+          },
+        },
+      };
+      break;
+    case "parent":
+      query.lesson.class = {
+        students: {
+          some: {
+            parentId: currentUserId!,
+          },
+        },
+      };
+      break;
+
+    default:
+      break;
   }
 
 

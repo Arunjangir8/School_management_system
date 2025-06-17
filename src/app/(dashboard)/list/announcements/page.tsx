@@ -4,21 +4,11 @@ import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import {currentUserId, role} from "@/lib/utlities";
 import { currentUser } from "@clerk/nextjs/server";
 import { Announcement, Class, Prisma } from "@prisma/client";
 import Image from "next/image";
-import Link from "next/link";
 
-
-
-let role: string | undefined;
-const roleSet = async () => {
-    const user = await currentUser();
-    return (user?.publicMetadata as { role?: string })?.role;
-}
-roleSet().then((r) => {
-    role = r;
-});
 
 const columns = [
     {
@@ -87,6 +77,18 @@ const AnnouncementListPage = async ({ searchParams, }: { searchParams: { [key: s
             }
         }
     }
+    const roleConditions = {
+    teacher: { lessons: { some: { teacherId: currentUserId! } } },
+    student: { students: { some: { id: currentUserId! } } },
+    parent: { students: { some: { parentId: currentUserId! } } },
+  };
+
+  query.OR = [
+    { classId: null },
+    {
+      class: roleConditions[role as keyof typeof roleConditions] || {},
+    },
+  ];
 
     const [data, count] = await prisma.$transaction([
         prisma.announcement.findMany({
@@ -120,7 +122,7 @@ const AnnouncementListPage = async ({ searchParams, }: { searchParams: { [key: s
                     </div>
                 </div>
             </div>
-            <Table columns={columns} renderRow={renderRow} data={data} /> 
+            <Table columns={columns} renderRow={renderRow} data={data} />
             <Pagination page={p} count={count} />
         </div>
     );

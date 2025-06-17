@@ -9,16 +9,7 @@ import { Class, Prisma, Subject, Teacher } from "@prisma/client";
 import Image from "next/image"
 import Link from "next/link";
 import { redirect } from "next/navigation";
-
-
-let role: string | undefined;
-const roleSet = async () => {
-    const user = await currentUser();
-    return (user?.publicMetadata as { role?: string })?.role;
-}
-roleSet().then((r) => {
-    role = r;
-});
+import {role} from "@/lib/utlities";
 
 const columns = [
   {

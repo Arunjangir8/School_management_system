@@ -1,6 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
+import { role } from "@/lib/utlities";
 
 const menuItems = [
   {
@@ -9,7 +10,7 @@ const menuItems = [
       {
         icon: "/home.png",
         label: "Home",
-        href: "/",
+        href: `/${role}`,
         visible: ["admin", "teacher", "student", "parent"],
       },
       {

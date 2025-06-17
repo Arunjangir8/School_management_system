@@ -9,16 +9,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { Class, Event, Prisma } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-
-
-let role: string | undefined;
-const roleSet = async () => {
-    const user = await currentUser();
-    return (user?.publicMetadata as { role?: string })?.role;
-}
-roleSet().then((r) => {
-    role = r;
-});
+import {currentUserId, role} from "@/lib/utlities";
 
 const columns = [
     {
@@ -91,31 +82,47 @@ const EventListPage = async ({ searchParams, }: { searchParams: { [key: string]:
 
     const query: Prisma.EventWhereInput = {};
 
-    if (queryParams) {
-        for (const [key, value] of Object.entries(queryParams)) {
-            if (value !== undefined) {
-                switch (key) {
-                    case "search":
-                        query.title = { contains: value, mode: "insensitive" };
-                        break;
-                    default:
-                        break;
-                }
-            }
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "search":
+            query.title = { contains: value, mode: "insensitive" };
+            break;
+          default:
+            break;
         }
+      }
     }
+  }
 
-    const [data, count] = await prisma.$transaction([
-        prisma.event.findMany({
-            where: query,
-            include: {
-                
-            },
-            take: ITEM_PER_PAGE,
-            skip: ITEM_PER_PAGE * (p - 1),
-        }),
-        prisma.event.count({ where: query }),
-    ]);
+  // ROLE CONDITIONS
+
+  const roleConditions = {
+    teacher: { lessons: { some: { teacherId: currentUserId! } } },
+    student: { students: { some: { id: currentUserId! } } },
+    parent: { students: { some: { parentId: currentUserId! } } },
+  };
+
+  query.OR = [
+    { classId: null },
+    {
+      class: roleConditions[role as keyof typeof roleConditions] || {},
+    },
+  ];
+
+  const [data, count] = await prisma.$transaction([
+    prisma.event.findMany({
+      where: query,
+      include: {
+        class: true,
+      },
+      take: ITEM_PER_PAGE,
+      skip: ITEM_PER_PAGE * (p - 1),
+    }),
+    prisma.event.count({ where: query }),
+  ]);
+
 
 
     return (

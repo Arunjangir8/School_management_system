@@ -8,7 +8,7 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import { currentUser } from "@clerk/nextjs/server";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-import Link from "next/link";
+import {currentUserId, role} from "@/lib/utlities";
 
 type ResultList = {
     id: number;
@@ -22,14 +22,6 @@ type ResultList = {
     startTime: Date;
 };
 
-let role: string | undefined;
-const roleSet = async () => {
-    const user = await currentUser();
-    return (user?.publicMetadata as { role?: string })?.role;
-}
-roleSet().then((r) => {
-    role = r;
-});
 
 const columns = [
     {
@@ -118,6 +110,29 @@ const ResultListPage = async ({ searchParams, }: { searchParams: { [key: string]
             }
         }
     }
+
+    switch (role) {
+    case "admin":
+      break;
+    case "teacher":
+      query.OR = [
+        { exam: { lesson: { teacherId: currentUserId! } } },
+        { assignment: { lesson: { teacherId: currentUserId! } } },
+      ];
+      break;
+
+    case "student":
+      query.studentId = currentUserId!;
+      break;
+
+    case "parent":
+      query.student = {
+        parentId: currentUserId!,
+      };
+      break;
+    default:
+      break;
+  }
 
     const [dataRes, count] = await prisma.$transaction([
         prisma.result.findMany({
