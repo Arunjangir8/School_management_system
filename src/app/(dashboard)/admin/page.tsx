@@ -1,13 +1,14 @@
 import UserCard from "@/components/UserCard"
-import CountCharts from "@/components/CountCharts"
-import AttendanceChart from "@/components/AttendanceChart"
 import FinanceChart from "@/components/FinanceChart"
 import EventCalender from "@/components/EventCalender"
 import Announcements from "@/components/Announcements"
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
-import { role } from "@/lib/utlities"
+import CountChartContainor from "@/components/CountChartContainor"
+import AttendanceChartContainor from "@/components/AttendanceChartContainor"
 const AdminPage =async () => {
+   const user =  await currentUser();
+   const role = (user?.publicMetadata as { role?: string })?.role;
    if (role !== "admin") {
     redirect(`/${role}`);
   }
@@ -17,14 +18,14 @@ const AdminPage =async () => {
         {/* Left  */}
         <div className="w-full lg:w-2/3 flex flex-col gap-10">
           <div className="flex gap-4 justify-between flex-wrap">
-            <UserCard type="Student" />
-            <UserCard type="Teacher" />
-            <UserCard type="Parent" />
-            <UserCard type="Staff" />
-          </div>
+            <UserCard type="admin" />
+            <UserCard type="teacher" />
+            <UserCard type="student" />
+            <UserCard type="parent" />
+          </div>      
           <div className="flex gap-4 flex-col lg:flex-row">
-            <div className="w-full lg:w-1/3 h-[450px]"><CountCharts /></div>
-            <div className="w-full lg:w-2/3 h-[450px]"><AttendanceChart /></div>
+            <div className="w-full lg:w-1/3 h-[450px]"><CountChartContainor /></div>
+            <div className="w-full lg:w-2/3 h-[450px]"><AttendanceChartContainor /></div>
           </div>
           <div className="w-full h-[550px]"><FinanceChart /></div>
         </div>

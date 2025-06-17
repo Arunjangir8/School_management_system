@@ -1,10 +1,11 @@
 import Announcements from "@/components/Announcements"
 import BigCalendar from "@/components/BigCalender"
-import { role } from "@/lib/utlities";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 const ParentPage = async () => {
+  const user = await currentUser();
+  const role = (user?.publicMetadata as { role?: string })?.role;
   if (role !== "parent") {
     redirect(`/${role}`);
   }

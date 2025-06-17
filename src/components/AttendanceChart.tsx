@@ -1,44 +1,11 @@
-"use client"
-import Image from 'next/image';
+"use client" 
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const data = [
-    {
-        name: 'Mon',
-        present: 40,
-        absents: 24,
-  
-    },
-    {
-        name: 'Tus',
-        present: 30,
-        absents: 18,
-    },
-    {
-        name: 'Wed',
-        present: 20,
-        absents: 29,
-    },
-    {
-        name: 'Thues',
-        present: 27,
-        absents: 38,
-    },
-    {
-        name: 'Fri',
-        present: 10,
-        absents: 48,
-    },
-   
-];
 
-const AttendanceChart = () => {
+const AttendanceChart = ({ data }: { data: { name: string; present: number; absents: number }[] }) => {
+    
     return (
-        <div className='bg-white rounded-xl h-full w-full p-4'>
-            <div className='flex justify-between items-center'>
-                <h1 className='text-lg font-semibold '>Attendance</h1>
-                <Image src={"/moreDark.png"} alt='' width={20} height={20} />
-            </div>
+        
             <div className='relative w-full h-[90%]'>
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart
@@ -62,7 +29,6 @@ const AttendanceChart = () => {
                     </BarChart>
                 </ResponsiveContainer>
             </div>
-        </div>
     )
 }
 

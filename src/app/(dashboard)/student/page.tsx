@@ -4,10 +4,11 @@ import Announcements from "@/components/Announcements"
 import BigCalendar from "@/components/BigCalender"
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { role } from "@/lib/utlities";
 
 
 const StudentPage = async () => {
+  const user = await currentUser();
+  const role = (user?.publicMetadata as { role?: string })?.role;
   if (role !== "student") {
     redirect(`/${role}`);
   }
