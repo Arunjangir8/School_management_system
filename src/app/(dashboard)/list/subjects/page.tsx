@@ -3,14 +3,23 @@ import FormModel from "@/components/FormModel";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { currentUser } from "@clerk/nextjs/server";
 import { Parent, Prisma, Subject, Teacher } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 
+let role: string | undefined;
+const roleSet = async () => {
+    const user = await currentUser();
+    return (user?.publicMetadata as { role?: string })?.role;
+}
+roleSet().then((r) => {
+    role = r;
+});
 
 const columns = [
     {
@@ -39,7 +48,7 @@ const renderRow = (item: SubjectList) => (
             {item.teachers.map((teacher) => teacher.name).join(",")}
         </td>
         <div className="flex items-center gap-2">
-            {role === "admin" && ( 
+            {role === "admin" && (
                 <>
                     <FormModel table="subject" type="update" data={item} />
                     <FormModel table="subject" type="delete" id={item.id} />
@@ -50,10 +59,15 @@ const renderRow = (item: SubjectList) => (
 );
 
 const SubjectListPage = async ({ searchParams, }: { searchParams: { [key: string]: string | undefined } }) => {
+    const user = await currentUser();
+    const role = (user?.publicMetadata as { role?: string })?.role;
+    if (role !== "admin" && role !== "teacher") {
+        redirect(`/${role}`);
+    }
     const { page, ...queryParams } = searchParams;
     const p = page ? parseInt(page) : 1;
 
-    const query: Prisma.SubjectWhereInput= {};
+    const query: Prisma.SubjectWhereInput = {};
 
     if (queryParams) {
         for (const [key, value] of Object.entries(queryParams)) {

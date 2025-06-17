@@ -3,9 +3,9 @@ import FormModel from "@/components/FormModel";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { examsData, role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { currentUser } from "@clerk/nextjs/server";
 import { Class, Exam, Prisma, Subject, Teacher } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,6 +18,15 @@ type ExamList = Exam & {
     teacher: Teacher;
   };
 };
+
+let role: string | undefined;
+const roleSet = async () => {
+    const user = await currentUser();
+    return (user?.publicMetadata as { role?: string })?.role;
+}
+roleSet().then((r) => {
+    role = r;
+});
 
 const columns = [
     {

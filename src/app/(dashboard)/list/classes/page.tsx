@@ -3,13 +3,23 @@ import FormModel from "@/components/FormModel";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { classesData, role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { currentUser } from "@clerk/nextjs/server";
 import { Class, Prisma, Teacher } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
+
+let role: string | undefined;
+const roleSet = async () => {
+    const user = await currentUser();
+    return (user?.publicMetadata as { role?: string })?.role;
+}
+roleSet().then((r) => {
+    role = r;
+});
 type ClassList = Class & { supervisor: Teacher };
 
 const columns = [
@@ -60,6 +70,11 @@ const renderRow = (item: ClassList) => (
     </tr>
 );
 const ClassListPage = async ({ searchParams, }: { searchParams: { [key: string]: string | undefined } }) => {
+    const user = await currentUser();
+    const role = (user?.publicMetadata as { role?: string })?.role;
+    if (role !== "admin" && role !== "teacher") {
+        redirect(`/${role}`);
+    }
     const { page, ...queryParams } = searchParams;
     const p = page ? parseInt(page) : 1;
 
@@ -102,10 +117,10 @@ const ClassListPage = async ({ searchParams, }: { searchParams: { [key: string]:
                 <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
                     <TableSearch />
                     <div className="flex items-center gap-4 self-end">
-                        <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+                        <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LamaYellow">
                             <Image src="/filter.png" alt="" width={14} height={14} />
                         </button>
-                        <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+                        <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LamaYellow">
                             <Image src="/sort.png" alt="" width={14} height={14} />
                         </button>
                         {role === "admin" && <FormModel table="class" type="create" />}

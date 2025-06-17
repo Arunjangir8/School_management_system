@@ -2,12 +2,22 @@ import FormModel from "@/components/FormModel";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { currentUser } from "@clerk/nextjs/server";
 import { Parent, Prisma, Student } from "@prisma/client";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
+
+let role: string | undefined;
+const roleSet = async () => {
+    const user = await currentUser();
+    return (user?.publicMetadata as { role?: string })?.role;
+}
+roleSet().then((r) => {
+    role = r;
+});
 
 const columns = [
   {
@@ -52,7 +62,7 @@ const renderRow = (item: ParentList) => (
     <td className="hidden md:table-cell">{item.address}</td>
     <td>
       <div className="flex items-center gap-2">
-         {role === "admin" && (
+        {role === "admin" && (
           <>
             <FormModel table="parent" type="update" data={item} />
             <FormModel table="parent" type="delete" id={item.id} />
@@ -63,8 +73,13 @@ const renderRow = (item: ParentList) => (
   </tr>
 )
 
-const parentsList = async  ({searchParams,}:{searchParams : {[key : string] : string | undefined }}) => {
-  const {page , ...queryParams} = searchParams;
+const parentsList = async ({ searchParams, }: { searchParams: { [key: string]: string | undefined } }) => {
+  const user = await currentUser();
+  const role = (user?.publicMetadata as { role?: string })?.role;
+  if (role !== "admin" && role !== "teacher") {
+    redirect(`/${role}`);
+  }
+  const { page, ...queryParams } = searchParams;
   const p = page ? parseInt(page) : 1;
 
   const query: Prisma.ParentWhereInput = {};
@@ -72,7 +87,7 @@ const parentsList = async  ({searchParams,}:{searchParams : {[key : string] : st
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
       if (value !== undefined) {
-        switch (key) {   
+        switch (key) {
           case "search":
             query.name = { contains: value, mode: "insensitive" };
             break;
@@ -87,12 +102,12 @@ const parentsList = async  ({searchParams,}:{searchParams : {[key : string] : st
     prisma.parent.findMany({
       where: query,
       include: {
-        students : true,
+        students: true,
       },
       take: ITEM_PER_PAGE,
       skip: ITEM_PER_PAGE * (p - 1),
     }),
-    prisma.parent.count({ where: query }),  
+    prisma.parent.count({ where: query }),
   ]);
 
   return (
@@ -109,7 +124,7 @@ const parentsList = async  ({searchParams,}:{searchParams : {[key : string] : st
               <Image src={"/sort.png"} alt="" width={14} height={14} />
             </button>
             {role === "admin" && (
-              <FormModel table="teacher" type="create"/>
+              <FormModel table="teacher" type="create" />
             )}
           </div>
         </div>

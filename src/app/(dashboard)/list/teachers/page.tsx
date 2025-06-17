@@ -2,13 +2,23 @@ import FormModel from "@/components/FormModel";
 import Pagination from "@/components/Pagination"
 import Table from "@/components/Table"
 import TableSearch from "@/components/TableSearch"
-import { role, teachersData } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { currentUser } from "@clerk/nextjs/server";
 import { Class, Prisma, Subject, Teacher } from "@prisma/client";
 import Image from "next/image"
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
+
+let role: string | undefined;
+const roleSet = async () => {
+    const user = await currentUser();
+    return (user?.publicMetadata as { role?: string })?.role;
+}
+roleSet().then((r) => {
+    role = r;
+});
 
 const columns = [
   {
@@ -46,7 +56,7 @@ const columns = [
   },
 ];
 
-type TeacherList = Teacher & {subjects : Subject[]} & {classes : Class[ ]}
+type TeacherList = Teacher & { subjects: Subject[] } & { classes: Class[] }
 
 const renderRow = (item: TeacherList) => (
   <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-LamaPurpleLight">
@@ -58,8 +68,8 @@ const renderRow = (item: TeacherList) => (
       </div>
     </td>
     <td className="hidden md:table-cell">{item.username}</td>
-    <td className="hidden md:table-cell">{item.subjects.map((item)=>item.name).join(",")}</td> 
-    <td className="hidden md:table-cell">{item.classes.map((item)=>item.name).join(",")}</td>
+    <td className="hidden md:table-cell">{item.subjects.map((item) => item.name).join(",")}</td>
+    <td className="hidden md:table-cell">{item.classes.map((item) => item.name).join(",")}</td>
     <td className="hidden md:table-cell">{item.phone}</td>
     <td className="hidden md:table-cell">{item.address}</td>
     <td>
@@ -70,15 +80,20 @@ const renderRow = (item: TeacherList) => (
           </button>
         </Link>
         {role === "admin" && (
-          <FormModel table="teacher" type="delete" id={item.id}/>
+          <FormModel table="teacher" type="delete" id={item.id} />
         )}
       </div>
     </td>
   </tr>
 )
 
-const teachersList = async  ({searchParams,}:{searchParams : {[key : string] : string | undefined }}) => {
-  const {page , ...queryParams} = searchParams;
+const teachersList = async ({ searchParams, }: { searchParams: { [key: string]: string | undefined } }) => {
+  const user = await currentUser();
+  const role = (user?.publicMetadata as { role?: string })?.role;
+  if (role !== "admin" && role !== "teacher") {
+    redirect(`/${role}`);
+  }
+  const { page, ...queryParams } = searchParams;
   const p = page ? parseInt(page) : 1;
 
   const query: Prisma.TeacherWhereInput = {};
@@ -121,7 +136,7 @@ const teachersList = async  ({searchParams,}:{searchParams : {[key : string] : s
 
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
-      <div className="flex justify-between items-center"> 
+      <div className="flex justify-between items-center">
         <h1 className="hidden md:block text-lg font-semibold">All Teachers</h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
@@ -132,12 +147,12 @@ const teachersList = async  ({searchParams,}:{searchParams : {[key : string] : s
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LamaYellow">
               <Image src={"/sort.png"} alt="" width={14} height={14} />
             </button>
-            {role === "admin" && <FormModel table="teacher" type="create"/>}
+            {role === "admin" && <FormModel table="teacher" type="create" />}
           </div>
         </div>
       </div>
       <Table columns={columns} renderRow={renderRow} data={data} />
-      <Pagination page={p} count={count}/>
+      <Pagination page={p} count={count} />
     </div>
   )
 }
