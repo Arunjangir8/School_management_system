@@ -6,9 +6,8 @@ import EventCalender from "@/components/EventCalender"
 import Announcements from "@/components/Announcements"
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
+import { role } from "@/lib/utlities"
 const AdminPage =async () => {
-   const user =  await currentUser();
-   const role = (user?.publicMetadata as { role?: string })?.role;
    if (role !== "admin") {
     redirect(`/${role}`);
   }

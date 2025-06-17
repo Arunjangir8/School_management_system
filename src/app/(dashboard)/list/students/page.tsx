@@ -82,8 +82,6 @@ const renderRow = (item: StudentList) => (
 );
 
 const StudentsList = async ({ searchParams, }: { searchParams: { [key: string]: string | undefined } }) => {
-  const user = await currentUser();
-  const role = (user?.publicMetadata as { role?: string })?.role;
   if (role !== "admin" && role !== "teacher") {
     redirect(`/${role}`);
   }
