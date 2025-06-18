@@ -1,12 +1,12 @@
 import UserCard from "@/components/UserCard"
 import FinanceChart from "@/components/FinanceChart"
-import EventCalender from "@/components/EventCalender"
 import Announcements from "@/components/Announcements"
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import CountChartContainor from "@/components/CountChartContainor"
 import AttendanceChartContainor from "@/components/AttendanceChartContainor"
-const AdminPage =async () => {
+import EventCalenderContainor from "@/components/EventCalenderContainor"
+const AdminPage =async ({searchParams}:{ searchParams: { [key: string]: string |  undefined } }) => {
    const user =  await currentUser();
    const role = (user?.publicMetadata as { role?: string })?.role;
    if (role !== "admin") {
@@ -31,7 +31,7 @@ const AdminPage =async () => {
         </div>
         {/* Right */}
         <div className="w-full lg:w-1/3 flex flex-col gap-8">
-          <EventCalender />
+          <EventCalenderContainor searchParams={searchParams}/>
           <Announcements/>
         </div>
 
