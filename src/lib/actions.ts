@@ -261,7 +261,7 @@ export const createStudent = async (
       include: { _count: { select: { students: true } } },
     });
 
-    if (classItem && classItem.capacity === classItem._count.students) {
+    if (classItem && classItem.capacity <= classItem._count.students) {
       return { success: false, error: true };
     }
     const client = await clerkClient()

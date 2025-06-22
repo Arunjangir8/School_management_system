@@ -67,7 +67,7 @@ const renderRow = (item: TeacherList) => (
     <td className="hidden md:table-cell">{item.address}</td>
     <td>
       <div className="flex items-center gap-2">
-        <Link href={`/list/teachers/${item.username}`}>
+        <Link href={`/list/teachers/${item.id}`}>
           <button className="w-7 h-7 flex items-center justify-center rounded-full bg-LamaSky">
             <Image src="/view.png" alt="" width={16} height={16} />
           </button>
@@ -86,9 +86,6 @@ const teachersList = async ({ searchParams, }: { searchParams: { [key: string]: 
     if (role !== "admin" && role !== "teacher") {
       redirect(`/${role}`);
     }
-  if (role !== "admin" && role !== "teacher") {
-    redirect(`/${role}`);
-  }
   const { page, ...queryParams } = searchParams;
   const p = page ? parseInt(page) : 1;
 
