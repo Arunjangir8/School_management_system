@@ -1,5 +1,5 @@
 
-import FormModel from "@/components/FormModel";
+import FormContainer from "@/components/FormContainer";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
@@ -8,7 +8,14 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import { currentUser } from "@clerk/nextjs/server";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-import {currentUserId, role} from "@/lib/utlities";
+
+let currentUserId: string | undefined;
+let role: string | undefined;
+
+const userPromise = currentUser().then(user => {
+  currentUserId = user?.id;
+  role = (user?.publicMetadata as { role?: string })?.role;
+});
 
 type ResultList = {
     id: number;
@@ -77,8 +84,8 @@ const renderRow = (item: ResultList) => (
             <div className="flex items-center gap-2">
                 {(role === "admin" || role === "teacher") && (
                     <>
-                        <FormModel table="result" type="update" data={item} />
-                        <FormModel table="result" type="delete" id={item.id} />
+                        <FormContainer table="result" type="update" data={item} />
+                        <FormContainer table="result" type="delete" id={item.id} />
                     </>
                 )}
             </div>
@@ -200,7 +207,7 @@ const ResultListPage = async ({ searchParams, }: { searchParams: { [key: string]
                         <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                             <Image src="/sort.png" alt="" width={14} height={14} />
                         </button>
-                        {role === "admin" || role === "teacher" && <FormModel table="result" type="create" />}
+                        {role === "admin" || role === "teacher" && <FormContainer table="result" type="create" />}
                     </div>
                 </div>
             </div>

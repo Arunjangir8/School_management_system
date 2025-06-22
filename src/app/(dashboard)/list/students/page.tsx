@@ -1,4 +1,4 @@
-import FormModel from "@/components/FormModel";
+import FormContainer from "@/components/FormContainer";
 import Pagination from "@/components/Pagination"
 import Table from "@/components/Table"
 import TableSearch from "@/components/TableSearch"
@@ -9,7 +9,8 @@ import { Class, Prisma, Student } from "@prisma/client";
 import Image from "next/image"
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import {role} from "@/lib/utlities";
+
+let role: string | undefined;
 
 const columns = [
   {
@@ -74,7 +75,7 @@ const renderRow = (item: StudentList) => (
           </button>
         </Link>
         {role === "admin" && (
-          <FormModel table="student" type="delete" id={item.id} />
+          <FormContainer table="student" type="delete" id={item.id} />
         )}
       </div>
     </td>
@@ -82,6 +83,11 @@ const renderRow = (item: StudentList) => (
 );
 
 const StudentsList = async ({ searchParams, }: { searchParams: { [key: string]: string | undefined } }) => {
+  const user = await currentUser();
+    role = (user?.publicMetadata as { role?: string })?.role;
+    if (role !== "admin" && role !== "teacher") {
+      redirect(`/${role}`);
+    }
   if (role !== "admin" && role !== "teacher") {
     redirect(`/${role}`);
   }
@@ -138,7 +144,7 @@ const StudentsList = async ({ searchParams, }: { searchParams: { [key: string]: 
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LamaYellow">
               <Image src={"/sort.png"} alt="" width={14} height={14} />
             </button>
-            {role === "admin" && <FormModel table="student" type="create" />}
+            {role === "admin" && <FormContainer table="student" type="create" />}
           </div>
         </div>
       </div>

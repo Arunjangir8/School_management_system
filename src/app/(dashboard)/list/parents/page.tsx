@@ -1,4 +1,4 @@
-import FormModel from "@/components/FormModel";
+import FormContainer from "@/components/FormContainer";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
@@ -8,7 +8,9 @@ import { currentUser } from "@clerk/nextjs/server";
 import { Parent, Prisma, Student } from "@prisma/client";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import {role} from "@/lib/utlities";
+
+
+let role: string | undefined;
 
 const columns = [
   {
@@ -55,8 +57,8 @@ const renderRow = (item: ParentList) => (
       <div className="flex items-center gap-2">
         {role === "admin" && (
           <>
-            <FormModel table="parent" type="update" data={item} />
-            <FormModel table="parent" type="delete" id={item.id} />
+            <FormContainer table="parent" type="update" data={item} />
+            <FormContainer table="parent" type="delete" id={item.id} />
           </>
         )}
       </div>
@@ -65,6 +67,8 @@ const renderRow = (item: ParentList) => (
 )
 
 const parentsList = async ({ searchParams, }: { searchParams: { [key: string]: string | undefined } }) => {
+  const user = await currentUser();
+  role = (user?.publicMetadata as { role?: string })?.role;
   if (role !== "admin" && role !== "teacher") {
     redirect(`/${role}`);
   }
@@ -113,7 +117,7 @@ const parentsList = async ({ searchParams, }: { searchParams: { [key: string]: s
               <Image src={"/sort.png"} alt="" width={14} height={14} />
             </button>
             {role === "admin" && (
-              <FormModel table="teacher" type="create" />
+              <FormContainer table="teacher" type="create" />
             )}
           </div>
         </div>

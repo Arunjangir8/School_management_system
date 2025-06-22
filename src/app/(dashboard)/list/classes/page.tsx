@@ -1,5 +1,5 @@
 
-import FormModel from "@/components/FormModel";
+import FormContainer from "@/components/FormContainer";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
@@ -8,9 +8,10 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import { currentUser } from "@clerk/nextjs/server";
 import { Class, Prisma, Teacher } from "@prisma/client";
 import Image from "next/image";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import {role} from "@/lib/utlities";
+
+let currentUserId: string | undefined;
+let role: string | undefined;
 
 type ClassList = Class & { supervisor: Teacher };
 
@@ -53,8 +54,8 @@ const renderRow = (item: ClassList) => (
             <div className="flex items-center gap-2">
                 {role === "admin" && (
                     <>
-                        <FormModel table="class" type="update" data={item} />
-                        <FormModel table="class" type="delete" id={item.id} />
+                        <FormContainer table="class" type="update" data={item} />
+                        <FormContainer table="class" type="delete" id={item.id} />
                     </>
                 )}
             </div>
@@ -62,6 +63,9 @@ const renderRow = (item: ClassList) => (
     </tr>
 );
 const ClassListPage = async ({ searchParams, }: { searchParams: { [key: string]: string | undefined } }) => {
+    const user = await currentUser();
+    currentUserId = user?.id;
+    role = (user?.publicMetadata as { role?: string })?.role;
     if (role !== "admin" && role !== "teacher") {
         redirect(`/${role}`);
     }
@@ -113,7 +117,7 @@ const ClassListPage = async ({ searchParams, }: { searchParams: { [key: string]:
                         <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LamaYellow">
                             <Image src="/sort.png" alt="" width={14} height={14} />
                         </button>
-                        {role === "admin" && <FormModel table="class" type="create" />}
+                        {role === "admin" && <FormContainer table="class" type="create" />}
                     </div>
                 </div>
             </div>

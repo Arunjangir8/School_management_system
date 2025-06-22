@@ -1,4 +1,4 @@
-import FormModel from "@/components/FormModel";
+import FormContainer from "@/components/FormContainer";
 import Pagination from "@/components/Pagination"
 import Table from "@/components/Table"
 import TableSearch from "@/components/TableSearch"
@@ -6,10 +6,12 @@ import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { currentUser } from "@clerk/nextjs/server";
 import { Class, Prisma, Subject, Teacher } from "@prisma/client";
+import { get } from "http";
 import Image from "next/image"
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import {role} from "@/lib/utlities";
+
+let role: string | undefined;
 
 const columns = [
   {
@@ -71,7 +73,7 @@ const renderRow = (item: TeacherList) => (
           </button>
         </Link>
         {role === "admin" && (
-          <FormModel table="teacher" type="delete" id={item.id} />
+          <FormContainer table="teacher" type="delete" id={item.id} />
         )}
       </div>
     </td>
@@ -79,6 +81,11 @@ const renderRow = (item: TeacherList) => (
 )
 
 const teachersList = async ({ searchParams, }: { searchParams: { [key: string]: string | undefined } }) => {
+  const user = await currentUser();
+    role = (user?.publicMetadata as { role?: string })?.role;
+    if (role !== "admin" && role !== "teacher") {
+      redirect(`/${role}`);
+    }
   if (role !== "admin" && role !== "teacher") {
     redirect(`/${role}`);
   }
@@ -136,7 +143,7 @@ const teachersList = async ({ searchParams, }: { searchParams: { [key: string]: 
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LamaYellow">
               <Image src={"/sort.png"} alt="" width={14} height={14} />
             </button>
-            {role === "admin" && <FormModel table="teacher" type="create" />}
+            {role === "admin" && <FormContainer table="teacher" type="create" />}
           </div>
         </div>
       </div>

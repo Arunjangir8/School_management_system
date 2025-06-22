@@ -1,4 +1,5 @@
 
+import FormContainer from "@/components/FormContainer";
 import FormModel from "@/components/FormModel";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
@@ -9,7 +10,10 @@ import { currentUser } from "@clerk/nextjs/server";
 import { Class, Event, Prisma } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import {currentUserId, role} from "@/lib/utlities";
+
+
+let currentUserId: string | undefined;
+let role: string | undefined;
 
 const columns = [
     {
@@ -68,8 +72,8 @@ const renderRow = (item: EventList) => (
             <div className="flex items-center gap-2">
                 {role === "admin" && (
                     <>
-                        <FormModel table="event" type="update" data={item} />
-                        <FormModel table="event" type="delete" id={item.id} />
+                        <FormContainer table="event" type="update" data={item} />
+                        <FormContainer table="event" type="delete" id={item.id} />
                     </>
                 )}
             </div>
@@ -77,6 +81,9 @@ const renderRow = (item: EventList) => (
     </tr>
 );
 const EventListPage = async ({ searchParams, }: { searchParams: { [key: string]: string | undefined } }) => {
+    const user = await currentUser();
+    currentUserId = user?.id;
+    role = (user?.publicMetadata as { role?: string })?.role;
     const { page, ...queryParams } = searchParams;
     const p = page ? parseInt(page) : 1;
 
@@ -139,7 +146,7 @@ const EventListPage = async ({ searchParams, }: { searchParams: { [key: string]:
                         <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                             <Image src="/sort.png" alt="" width={14} height={14} />
                         </button>
-                         {role === "admin" && <FormModel table="event" type="create" />}
+                         {role === "admin" && <FormContainer table="event" type="create" />}
                     </div>
                 </div>
             </div>
