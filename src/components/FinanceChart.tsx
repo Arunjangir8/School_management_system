@@ -1,6 +1,7 @@
 "use client"
 import Image from "next/image"
-import { experimental_useEffectEvent } from "react";
+import { FiMoreHorizontal } from "react-icons/fi";
+
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -25,7 +26,7 @@ const FinanceChart = () => {
         <div className='bg-white rounded-xl h-full w-full p-4'>
             <div className='flex justify-between items-center'>
                 <h1 className='text-lg font-semibold '>Finance</h1>
-                <Image src={"/moreDark.png"} alt='' width={20} height={20} />
+                <FiMoreHorizontal size={32} />
             </div>
             <div className="w-full h-[95%]">
                 <ResponsiveContainer width="100%" height="100%">

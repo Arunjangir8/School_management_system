@@ -9,6 +9,7 @@ import { Class, Prisma, Student } from "@prisma/client";
 import Image from "next/image"
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { FaEye } from "react-icons/fa";
 
 let role: string | undefined;
 
@@ -71,7 +72,7 @@ const renderRow = (item: StudentList) => (
       <div className="flex items-center gap-2">
         <Link href={`/list/students/${item.id}`}>
           <button className="w-7 h-7 flex items-center justify-center rounded-full bg-LamaSky">
-            <Image src="/view.png" alt="" width={16} height={16} />
+            <FaEye color="white" />
           </button>
         </Link>
         {role === "admin" && (

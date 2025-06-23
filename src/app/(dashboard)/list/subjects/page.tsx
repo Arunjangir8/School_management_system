@@ -39,10 +39,12 @@ const renderRow = (item: SubjectList) => (
             {item.teachers.map((teacher) => teacher.name).join(",")}
         </td>
         <div className="flex items-center gap-2">
-                <>
+                {role === "admin" && (
+                    <>
                     <FormContainer table="subject" type="update" data={item} />
                     <FormContainer table="subject" type="delete" id={item.id} />
-                </>
+                    </>
+          )}
         </div>
     </tr>
 );
@@ -101,7 +103,7 @@ const SubjectListPage = async ({ searchParams, }: { searchParams: { [key: string
                         <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LamaYellow">
                             <Image src="/sort.png" alt="" width={14} height={14} />
                         </button>
-                        <FormContainer table="teacher" type="create" />
+                        <FormContainer table="subject" type="create" />
                     </div>
                 </div>
             </div>

@@ -25,7 +25,7 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
   let relatedData = {};
 
   const user =  await currentUser();
-const role = (user?.publicMetadata as { role?: string })?.role;
+  const role = (user?.publicMetadata as { role?: string })?.role;
   const currentUserId = user?.id;
 
   if (type !== "delete") {

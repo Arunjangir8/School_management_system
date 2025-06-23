@@ -116,9 +116,7 @@ const parentsList = async ({ searchParams, }: { searchParams: { [key: string]: s
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LamaYellow">
               <Image src={"/sort.png"} alt="" width={14} height={14} />
             </button>
-            {role === "admin" && (
-              <FormContainer table="teacher" type="create" />
-            )}
+            {role === "admin" && <FormContainer table="parent" type="create" />}
           </div>
         </div>
       </div>

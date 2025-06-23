@@ -6,7 +6,8 @@ import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { currentUser } from "@clerk/nextjs/server";
 import { Class, Prisma, Subject, Teacher } from "@prisma/client";
-import { get } from "http";
+import { FaEye } from "react-icons/fa";
+
 import Image from "next/image"
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -69,7 +70,7 @@ const renderRow = (item: TeacherList) => (
       <div className="flex items-center gap-2">
         <Link href={`/list/teachers/${item.id}`}>
           <button className="w-7 h-7 flex items-center justify-center rounded-full bg-LamaSky">
-            <Image src="/view.png" alt="" width={16} height={16} />
+            <FaEye color="white" />
           </button>
         </Link>
         {role === "admin" && (

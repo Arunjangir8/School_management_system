@@ -1,5 +1,5 @@
 {
-  "name": "lama-dev-next-dashboard",
+  "name": "arun-dev-next-dashboard",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^5.1.1",
     "@prisma/client": "^6.9.0",
     "@types/react-big-calendar": "^1.16.2",
+    "lucide-react": "^0.522.0",
     "moment": "^2.30.1",
     "next": "^14.2.5",
     "next-cloudinary": "^6.13.0",
@@ -23,6 +24,7 @@
     "react-calendar": "^6.0.0",
     "react-dom": "^18",
     "react-hook-form": "^7.57.0",
+    "react-icons": "^5.5.0",
     "react-toastify": "^11.0.5",
     "recharts": "^2.15.3",
     "ts-node": "^10.9.2",

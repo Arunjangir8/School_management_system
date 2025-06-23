@@ -1,6 +1,6 @@
-import Image from "next/image"
 import AttendanceChart from "./AttendanceChart"
 import prisma from "@/lib/prisma";
+import { FiMoreHorizontal } from "react-icons/fi";
 
 async function AttendanceChartContainor() {
     
@@ -50,7 +50,7 @@ async function AttendanceChartContainor() {
     <div className='bg-white rounded-xl h-full w-full p-4'>
                 <div className='flex justify-between items-center'>
                     <h1 className='text-lg font-semibold '>Attendance</h1>
-                    <Image src={"/moreDark.png"} alt='' width={20} height={20} />
+                    <FiMoreHorizontal size={32} />
                 </div>
                 <AttendanceChart data={data}/>
       

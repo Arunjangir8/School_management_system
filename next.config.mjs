@@ -3,14 +3,16 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "images.pexels.com",
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com', // ✅ Add this line
       },
     ],
-  },
-  experimental: {
-    serverActions: true, // Optional but helpful for Clerk & App Router features
   },
 };
 
 export default nextConfig;
+

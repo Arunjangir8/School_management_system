@@ -185,7 +185,7 @@ const TeacherForm = ({
           )}
         </div>
         <CldUploadWidget
-          uploadPreset="school"
+          uploadPreset="SchoolMangementSystem"
           onSuccess={(result: any, { widget }: { widget: any }) => {
             setImg(result.info);
             widget.close();
