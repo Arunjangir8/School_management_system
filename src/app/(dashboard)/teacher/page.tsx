@@ -11,7 +11,7 @@ const TeacherPage =async() => {
     redirect(`/${role}`);
   }
   return (
-    <div className="flex-1 p-4 flex gap-4 flex-col md:flex-row">
+    <div className="flex-1 h-full p-4 flex gap-4 flex-col md:flex-row">
       <div className="w-full xl:w-2/3 flex flex-col gap-10">
         <div className="lg:h-full h-[800px] bg-white p-4 rounded-md">
           <h1 className="text-xl font-semibold">Schedule (4A)</h1>

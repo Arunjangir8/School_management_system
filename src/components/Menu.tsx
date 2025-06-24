@@ -18,6 +18,7 @@ import {
   LogOut,
   UserCircle,
 } from "lucide-react";
+import { UserButton } from "@clerk/nextjs";
 
 const Menu = async () => {
   const user = await currentUser();
@@ -26,12 +27,6 @@ const Menu = async () => {
   const iconClasses = "text-blue-500"; // You can adjust color here
 
   const menuItems = [
-    {
-      title: "PROFILE",
-      items: [
-        { icon: UserCircle, label: "Profile", href: "/profile", visible: ["admin", "teacher", "student", "parent"] }
-      ],
-    },
     {
       title: "MENU",
       items: [
@@ -62,6 +57,16 @@ const Menu = async () => {
 
   return (
     <div className="mt-4 text-sm">
+      <div className="flex flex-col gap-2">
+          <span className="hidden lg:block text-gray-400 font-light my-4">PROFILE</span>
+                <button
+                  className="flex justify-center items-center lg:justify-start gap-4 text-gray-500 py-1.5 rounded-md hover:bg-LamaSkyLight transition-colors"
+                >
+                  <UserButton/>
+                  <span className="hidden lg:block">{user?.fullName || "User"}</span>
+                </button>
+        </div>
+
       {menuItems.map((section) => (
         <div className="flex flex-col gap-2" key={section.title}>
           <span className="hidden lg:block text-gray-400 font-light my-4">{section.title}</span>
