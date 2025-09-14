@@ -46,8 +46,8 @@ const FinanceChart = () => {
                         <YAxis axisLine={false} tickMargin={10} tickLine={false}/>
                         <Tooltip />
                         <Legend align='center' verticalAlign='top' wrapperStyle={{paddingTop : "20px", paddingBottom : "40px"}}/>
-                        <Line type="monotone" dataKey="expence" stroke="#C3EBFA" strokeWidth={5}/>
-                        <Line type="monotone" dataKey="income" stroke="#FAE27C" strokeWidth={5}/>
+                        <Line type="monotone" dataKey="expence" stroke="black" strokeWidth={5}/>
+                        <Line type="monotone" dataKey="income" stroke="gray" strokeWidth={5}/>
                     </LineChart>
                 </ResponsiveContainer>
             </div>

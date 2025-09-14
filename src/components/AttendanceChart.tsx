@@ -46,16 +46,16 @@ const AttendanceChart = ({ data }: { data: AttendanceData }) => {
 
                     <Bar
                         dataKey="absents"
-                        fill="#FAD4D4" 
-                        activeBar={<Rectangle fill="#FAD4D4" />}
+                        fill="black" 
+                        activeBar={<Rectangle fill="black" />}
                         legendType="circle"
                         radius={[10, 10, 0, 0]}
                         barSize={20}
                     />
                     <Bar
                         dataKey="present"
-                        fill="#D3F8E2" 
-                        activeBar={<Rectangle fill="#D3F8E2" />}
+                        fill="gray" 
+                        activeBar={<Rectangle fill="gray" />}
                         legendType="circle"
                         radius={[10, 10, 0, 0]}
                         barSize={20}

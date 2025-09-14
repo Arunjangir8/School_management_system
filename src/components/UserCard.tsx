@@ -12,17 +12,17 @@ const UserCard = async ({ type }: { type: "admin" | "teacher" | "student" | "par
   const data = await modelMap[type].count()
 
   // Inline background colors based on type for variety
-  const bgColorMap: Record<typeof type, string> = {
-    admin: "#EDE9FE",    // light purple
-    teacher: "#FEF9C3",  // light yellow
-    student: "#DBEAFE",  // light blue
-    parent: "#DCFCE7",   // light green
-  }
+  // const bgColorMap: Record<typeof type, string> = {
+  //   admin: "#EDE9FE",    // light purple
+  //   teacher: "#FEF9C3",  // light yellow
+  //   student: "#DBEAFE",  // light blue
+  //   parent: "#DCFCE7",   // light green
+  // }
 
   return (
     <div
       className="rounded-xl shadow-sm p-4 flex flex-col justify-between flex-1 transition-all hover:shadow-md"
-      style={{ backgroundColor: bgColorMap[type] }}
+      style={{ backgroundColor: 'white' }}
     >
       <div className="flex justify-between items-center">
         <span className="text-[10px] px-2 py-[2px] bg-white rounded-full text-green-600 font-medium">

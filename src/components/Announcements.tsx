@@ -28,7 +28,7 @@ const Announcements = async () => {
             </div>
             <div className="flex flex-col gap-4 mt-4">
                 {data.map((ann)=>(
-                <div className="odd:bg-LamaSkyLight even:bg-LamaPurpleLight p-4 rounded-md" key={ann.id}>
+                <div className="bg-white border-2 p-4 rounded-md" key={ann.id}>
                     <div className="flex justify-between items-center">
                         <h2 className="font-medium">{ann.title}</h2>
                         <span className="text-xs rounded-md bg-white text-gray-400 px-1 py-1"> {new Date(ann.date).toLocaleTimeString('en-IN', {

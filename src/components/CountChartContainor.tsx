@@ -21,12 +21,12 @@ async function CountChartContainor() {
                 <CountCharts boys={boys} girls={girls}/>
          <div className='flex justify-center gap-16'>
                 <div className='flex flex-col gap-1'>
-                    <div className='h-5 w-5 rounded-full bg-LamaSky' />
+                    <div className='h-5 w-5 rounded-full bg-black' />
                     <h1 className='font-bold'>{boys}</h1>
                     <h2 className='text-gray-300 text-xs'>Boys ({Math.round(boys*100/(girls+boys))}%)</h2>
                 </div>
                 <div className='flex flex-col gap-1'>
-                    <div className='h-5 w-5 rounded-full bg-LamaYellow' />
+                    <div className='h-5 w-5 rounded-full bg-gray-500' />
                     <h1 className='font-bold'>{girls}</h1>
                     <h2 className='text-gray-300 text-xs'>Girl ({Math.round(boys*100/(girls+boys))}%)</h2>
                 </div>

@@ -22,12 +22,12 @@ const CountCharts = ({boys,girls}:{boys:number , girls:number}) => {
     {
         name: 'Boys',
         count: boys,
-        fill: '#ADD8E6',
+        fill: 'black',
     },
     {
         name: 'Girls',
         count: girls,
-        fill: '#FFB6C1',
+        fill: 'gray',
     }
 ];
     return ( 
@@ -44,8 +44,8 @@ const CountCharts = ({boys,girls}:{boys:number , girls:number}) => {
                 {/* <Image src={"/maleFemale.png"} alt='' width={48} height={48} className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'/> */}
                 <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-11 h-11' >
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-0">
-                        <FaMale size={45} color="#ADD8E6" /> {/* Light Blue for Boy */}
-                        <FaFemale size={45} color="#FFB6C1" /> {/* Light Pink for Girl */}
+                        <FaMale size={45} color="black" /> {/* Light Blue for Boy */}
+                        <FaFemale size={45} color="gray" /> {/* Light Pink for Girl */}
                     </div>
                 </div>
             </div>
